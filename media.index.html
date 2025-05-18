@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة الصفوف المتوسطة</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        
+        .tab-container {
+            width: 95%;
+            max-width: 1200px;
+            margin: 20px auto;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .tabs {
+            display: flex;
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            background-color: #2c3e50;
+        }
+        
+        .tabs li {
+            flex: 1;
+            text-align: center;
+            padding: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .tabs li:hover {
+            background-color: #34495e;
+        }
+        
+        .tabs li.active {
+            background-color: #3498db;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            min-height: 500px;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .upload-section {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px dashed #ccc;
+        }
+        
+        .upload-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        
+        .upload-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .media-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .media-item {
+            width: calc(33.333% - 15px);
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .media-item img, .media-item video {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 10px;
+        }
+        
+        .youtube-embed {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        
+        .youtube-embed iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .input-group {
+            margin-bottom: 15px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        .input-group input, .input-group textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 768px) {
+            .media-item {
+                width: calc(50% - 15px);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .media-item {
+                width: 100%;
+            }
+            
+            .tabs li {
+                font-size: 14px;
+                padding: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="tab-container">
+        <ul class="tabs">
+            <li class="active" onclick="openTab(event, 'first-grade')">أول متوسط</li>
+            <li onclick="openTab(event, 'second-grade')">ثاني متوسط</li>
+            <li onclick="openTab(event, 'third-grade')">ثالث متوسط</li>
+        </ul>
+        
+        <!-- تبويب أول متوسط -->
+        <div id="first-grade" class="tab-content active">
+            <h2>أول متوسط</h2>
+            
+            <div class="upload-section">
+                <h3>رفع ملفات جديدة</h3>
+                
+                <div class="input-group">
+                    <label for="first-youtube">رابط يوتيوب:</label>
+                    <input type="text" id="first-youtube" placeholder="https://www.youtube.com/watch?v=..." />
+                    <button class="upload-btn" onclick="addYouTube('first')">إضافة رابط يوتيوب</button>
+                </div>
+                
+                <div class="input-group">
+                    <label for="first-images">رفع صور:</label>
+                    <input type="file" id="first-images" accept="image/*" multiple />
+                    <button class="upload-btn" onclick="uploadImages('first')">رفع الصور</button>
+                </div>
+                
+                <div class="input-group">
+                    <label for="first-videos">رفع فيديوهات:</label>
+                    <input type="file" id="first-videos" accept="video/*" multiple />
+                    <button class="upload-btn" onclick="uploadVideos('first')">رفع الفيديوهات</button>
+                </div>
+            </div>
+            
+            <h3>الملفات المرفوعة</h3>
+            <div id="first-media" class="media-container">
+                <!-- سيتم عرض الملفات هنا تلقائيا -->
+            </div>
+        </div>
+        
+        <!-- تبويب ثاني متوسط -->
+        <div id="second-grade" class="tab-content">
+            <h2>ثاني متوسط</h2>
+            
+            <div class="upload-section">
+                <h3>رفع ملفات جديدة</h3>
+                
+                <div class="input-group">
+                    <label for="second-youtube">رابط يوتيوب:</label>
+                    <input type="text" id="second-youtube" placeholder="https://www.youtube.com/watch?v=..." />
+                    <button class="upload-btn" onclick="addYouTube('second')">إضافة رابط يوتيوب</button>
+                </div>
+                
+                <div class="input-group">
+                    <label for="second-images">رفع صور:</label>
+                    <input type="file" id="second-images" accept="image/*" multiple />
+                    <button class="upload-btn" onclick="uploadImages('second')">رفع الصور</button>
+                </div>
+                
+                <div class="input-group">
+                    <label for="second-videos">رفع فيديوهات:</label>
+                    <input type="file" id="second-videos" accept="video/*" multiple />
+                    <button class="upload-btn" onclick="uploadVideos('second')">رفع الفيديوهات</button>
+                </div>
+            </div>
+            
+            <h3>الملفات المرفوعة</h3>
+            <div id="second-media" class="media-container">
+                <!-- سيتم عرض الملفات هنا تلقائيا -->
+            </div>
+        </div>
+        
+        <!-- تبويب ثالث متوسط -->
+        <div id="third-grade" class="tab-content">
+            <h2>ثالث متوسط</h2>
+            
+            <div class="upload-section">
+                <h3>رفع ملفات جديدة</h3>
+                
+                <div class="input-group">
+                    <label for="third-youtube">رابط يوتيوب:</label>
+                    <input type="text" id="third-youtube" placeholder="https://www.youtube.com/watch?v=..." />
+                    <button class="upload-btn" onclick="addYouTube('third')">إضافة رابط يوتيوب</button>
+                </div>
+                
+                <div class="input-group">
+                    <label for="third-images">رفع صور:</label>
+                    <input type="file" id="third-images" accept="image/*" multiple />
+                    <button class="upload-btn" onclick="uploadImages('third')">رفع الصور</button>
+                </div>
+                
+                <div class="input-group">
+                    <label for="third-videos">رفع فيديوهات:</label>
+                    <input type="file" id="third-videos" accept="video/*" multiple />
+                    <button class="upload-btn" onclick="uploadVideos('third')">رفع الفيديوهات</button>
+                </div>
+            </div>
+            
+            <h3>الملفات المرفوعة</h3>
+            <div id="third-media" class="media-container">
+                <!-- سيتم عرض الملفات هنا تلقائيا -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // تبديل التبويبات
+        function openTab(evt, tabId) {
+            // إخفاء جميع محتويات التبويبات
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            // إزالة النشاط من جميع التبويبات
+            var tabs = document.getElementsByClassName("tabs")[0].getElementsByTagName("li");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            // إظهار محتوى التبويب المحدد وإضافة class نشط
+            document.getElementById(tabId).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+        
+        // تخزين البيانات في localStorage
+        function saveMedia(grade, type, data) {
+            let key = `${grade}_${type}`;
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+        
+        // جلب البيانات من localStorage
+        function loadMedia(grade, type) {
+            let key = `${grade}_${type}`;
+            let data = localStorage.getItem(key);
+            return data ? JSON.parse(data) : [];
+        }
+        
+        // عرض جميع الوسائط عند تحميل الصفحة
+        function displayAllMedia() {
+            const grades = ['first', 'second', 'third'];
+            const types = ['youtube', 'images', 'videos'];
+            
+            grades.forEach(grade => {
+                types.forEach(type => {
+                    const media = loadMedia(grade, type);
+                    media.forEach(item => {
+                        displayMedia(grade, type, item);
+                    });
+                });
+            });
+        }
+        
+        // عرض وسائط محددة
+        function displayMedia(grade, type, data) {
+            const container = document.getElementById(`${grade}-media`);
+            
+            if (type === 'youtube') {
+                // استخراج معرف الفيديو من الرابط
+                let videoId = getYouTubeId(data.url);
+                if (!videoId) return;
+                
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'media-item';
+                itemDiv.innerHTML = `
+                    <h4>${data.title || 'فيديو يوتيوب'}</h4>
+                    <div class="youtube-embed">
+                        <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
+                    </div>
+                    <p>${data.description || ''}</p>
+                    <button onclick="deleteMedia('${grade}', 'youtube', '${data.url}')">حذف</button>
+                `;
+                container.appendChild(itemDiv);
+            }
+            else if (type === 'images') {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'media-item';
+                itemDiv.innerHTML = `
+                    <img src="${data.url}" alt="${data.name || 'صورة'}">
+                    <p>${data.name || 'صورة'}</p>
+                    <button onclick="deleteMedia('${grade}', 'images', '${data.url}')">حذف</button>
+                `;
+                container.appendChild(itemDiv);
+            }
+            else if (type === 'videos') {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'media-item';
+                itemDiv.innerHTML = `
+                    <video controls>
+                        <source src="${data.url}" type="${data.type || 'video/mp4'}">
+                        متصفحك لا يدعم تشغيل الفيديو.
+                    </video>
+                    <p>${data.name || 'فيديو'}</p>
+                    <button onclick="deleteMedia('${grade}', 'videos', '${data.url}')">حذف</button>
+                `;
+                container.appendChild(itemDiv);
+            }
+        }
+        
+        // استخراج معرف فيديو يوتيوب من الرابط
+        function getYouTubeId(url) {
+            var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            var match = url.match(regExp);
+            
+            if (match && match[2].length == 11) {
+                return match[2];
+            } else {
+                return null;
+            }
+        }
+        
+        // إضافة رابط يوتيوب
+        function addYouTube(grade) {
+            const input = document.getElementById(`${grade}-youtube`);
+            const url = input.value.trim();
+            
+            if (!url) {
+                alert('الرجاء إدخال رابط يوتيوب صحيح');
+                return;
+            }
+            
+            const videoId = getYouTubeId(url);
+            if (!videoId) {
+                alert('الرجاء إدخال رابط يوتيوب صحيح');
+                return;
+            }
+            
+            const title = prompt('أدخل عنوان الفيديو (اختياري):');
+            const description = prompt('أدخل وصفًا للفيديو (اختياري):');
+            
+            const newItem = {
+                url: url,
+                title: title,
+                description: description,
+                date: new Date().toLocaleString()
+            };
+            
+            // جلب البيانات الحالية وإضافة العنصر الجديد
+            let currentMedia = loadMedia(grade, 'youtube');
+            currentMedia.push(newItem);
+            saveMedia(grade, 'youtube', currentMedia);
+            
+            // عرض العنصر الجديد
+            displayMedia(grade, 'youtube', newItem);
+            
+            // مسح حقل الإدخال
+            input.value = '';
+        }
+        
+        // رفع الصور
+        function uploadImages(grade) {
+            const input = document.getElementById(`${grade}-images`);
+            const files = input.files;
+            
+            if (files.length === 0) {
+                alert('الرجاء اختيار صورة واحدة على الأقل');
+                return;
+            }
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const newItem = {
+                        url: e.target.result,
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        date: new Date().toLocaleString()
+                    };
+                    
+                    // جلب البيانات الحالية وإضافة العنصر الجديد
+                    let currentMedia = loadMedia(grade, 'images');
+                    currentMedia.push(newItem);
+                    saveMedia(grade, 'images', currentMedia);
+                    
+                    // عرض العنصر الجديد
+                    displayMedia(grade, 'images', newItem);
+                };
+                
+                reader.readAsDataURL(file);
+            }
+            
+            // مسح حقل الإدخال
+            input.value = '';
+        }
+        
+        // رفع الفيديوهات
+        function uploadVideos(grade) {
+            const input = document.getElementById(`${grade}-videos`);
+            const files = input.files;
+            
+            if (files.length === 0) {
+                alert('الرجاء اختيار فيديو واحد على الأقل');
+                return;
+            }
+            
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const newItem = {
+                        url: e.target.result,
+                        name: file.name,
+                        type: file.type,
+                        size: file.size,
+                        date: new Date().toLocaleString()
+                    };
+                    
+                    // جلب البيانات الحالية وإضافة العنصر الجديد
+                    let currentMedia = loadMedia(grade, 'videos');
+                    currentMedia.push(newItem);
+                    saveMedia(grade, 'videos', currentMedia);
+                    
+                    // عرض العنصر الجديد
+                    displayMedia(grade, 'videos', newItem);
+                };
+                
+                reader.readAsDataURL(file);
+            }
+            
+            // مسح حقل الإدخال
+            input.value = '';
+        }
+        
+        // حذف وسائط
+        function deleteMedia(grade, type, url) {
+            if (!confirm('هل أنت متأكد من حذف هذا العنصر؟')) return;
+            
+            let currentMedia = loadMedia(grade, type);
+            currentMedia = currentMedia.filter(item => item.url !== url);
+            saveMedia(grade, type, currentMedia);
+            
+            // إعادة تحميل العرض
+            document.getElementById(`${grade}-media`).innerHTML = '';
+            currentMedia.forEach(item => {
+                displayMedia(grade, type, item);
+            });
+        }
+        
+        // تحميل جميع الوسائط عند بدء التشغيل
+        window.onload = function() {
+            displayAllMedia();
+        };
+    </script>
+</body>
+</html>
